@@ -21,7 +21,6 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         setupUI()
     }
     
@@ -30,6 +29,7 @@ class ViewController: UIViewController {
         rootView.tableView.isEditing = true
         rootView.tableView.delegate = self
         rootView.tableView.dataSource = self
+        rootView.tableView.reloadData()
     }
 }
 
@@ -43,6 +43,8 @@ extension ViewController: UITableViewDelegate {
         array.remove(at: sourceIndexPath.row)
         array.insert(item, at: destinationIndexPath.row)
         print("Array ", array)
+        debugPrint("\(sourceIndexPath.row) => \(destinationIndexPath.row)")
+        // To check for correctness enable: self.tableView.reloadData()
     }
 }
 
@@ -54,6 +56,26 @@ extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
         cell.textLabel?.text = array[indexPath.row]
+        cell.textLabel?.textColor = .black
+        cell.backgroundColor = .white
+        print("for index: ", indexPath.row ,cell.showsReorderControl)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .none
+    }
+    
+    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let imageView = cell.subviews.first(where: { $0.description.contains("Reorder") })?.subviews.first(where: { $0 is UIImageView }) as? UIImageView
+        imageView?.tintColor = .green
+        imageView?.image = UIImage(named: "menu")
+        let size = cell.bounds.height * 0.5
+        imageView?.frame.size.width = size
+        imageView?.frame.size.height = size
     }
 }

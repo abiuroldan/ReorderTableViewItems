@@ -12,6 +12,7 @@ class RootView: UIView {
     
     lazy var tableView: UITableView = {
         let tv = UITableView(frame: .zero)
+        tv.backgroundColor = .clear
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
@@ -22,6 +23,7 @@ class RootView: UIView {
     }
     
     private func setupUI() {
+        backgroundColor = .white
         addSubview(tableView)
         
         tableView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor).isActive = true
